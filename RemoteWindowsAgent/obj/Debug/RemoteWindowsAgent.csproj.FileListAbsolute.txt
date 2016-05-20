@@ -1,0 +1,11 @@
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\Log4Net.config
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\RemoteWindowsAgent.dll.config
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\RemoteWindowsAgent.dll
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\RemoteWindowsAgent.pdb
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\log4net.dll
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\nunit.framework.dll
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\log4net.xml
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\nunit.framework.xml
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\obj\Debug\RemoteWindowsAgent.dll
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\obj\Debug\RemoteWindowsAgent.pdb
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\obj\Debug\RemoteWindowsAgent.csprojResolveAssemblyReference.cache

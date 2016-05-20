@@ -1,0 +1,6 @@
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\AgentConfiguration\obj\x86\Debug\AgentConfiguration.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\AgentConfiguration\bin\Debug\AgentConfiguration.exe.config
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\AgentConfiguration\bin\Debug\AgentConfiguration.exe
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\AgentConfiguration\bin\Debug\AgentConfiguration.pdb
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\AgentConfiguration\obj\x86\Debug\AgentConfiguration.exe
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\AgentConfiguration\obj\x86\Debug\AgentConfiguration.pdb

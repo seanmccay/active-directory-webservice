@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" >
+  
+  <Bundle Name="Avatier Remote Windows Agent" Version="1.0.0.3" Manufacturer="Avatier Corporation" UpgradeCode="b2d113bd-b1f6-4c61-a115-76ff9961f063"
+          HelpUrl="http://www.avatier.com/support">
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" >
+      <bal:WixStandardBootstrapperApplication
+          LicenseFile=".\Avatier Terms of Use.rtf"
+          LogoFile=".\Avatier_Icon.png"
+        />
+    </BootstrapperApplicationRef>
+    
+    
+    <Chain>
+      <PackageGroupRef Id="NetFx40Redist"/>
+      <MsiPackage SourceFile="$(var.TestSetup.TargetPath)" />
+      <PackageGroupRef Id="WebServerPro"/>
+    </Chain>
+  </Bundle>
+  
+  <Fragment>
+    <util:FileSearch Path="[ProgramFilesFolder]UltiDev\Web Server\UWS.Explorer.exe"
+                 Variable="WebServerProInstalled"
+                 Result="exists"/>
+
+    <PackageGroup Id="WebServerPro">
+      <ExePackage Id="WebServerPro"
+                  DisplayName="UltiDev Web Server Pro"
+                  Cache="yes"
+                  Compressed="yes"
+                  PerMachine="yes"
+                  Permanent="no"
+                  Vital="no"
+                  SourceFile=".\UltiDevWebServerSetup.exe"
+                  DetectCondition="WebServerProInstalled"
+                  InstallCommand="/passive" />                 
+    </PackageGroup>
+  </Fragment>
+</Wix>

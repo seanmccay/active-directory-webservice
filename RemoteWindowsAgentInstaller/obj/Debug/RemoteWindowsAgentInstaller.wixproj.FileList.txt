@@ -1,0 +1,6 @@
+obj\Debug\Bundle.wixobj
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgentInstaller\bin\Debug\RemoteWindowsAgentInstaller.exe
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgentInstaller\bin\Debug\RemoteWindowsAgentInstaller.wixpdb
+obj\Debug\RemoteWindowsAgentInstaller.wixproj.BindContentsFileList.txt
+obj\Debug\RemoteWindowsAgentInstaller.wixproj.BindOutputsFileList.txt
+obj\Debug\RemoteWindowsAgentInstaller.wixproj.BindBuiltOutputsFileList.txt

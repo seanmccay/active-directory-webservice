@@ -1,0 +1,2 @@
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgentInstaller\bin\Debug\RemoteWindowsAgentInstaller.exe
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgentInstaller\bin\Debug\RemoteWindowsAgentInstaller.wixpdb

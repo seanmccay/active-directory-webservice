@@ -1,0 +1,7 @@
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\AgentConfiguration\bin\Debug\AgentConfiguration.exe
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\Log4Net.config
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\log4net.dll
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\nunit.framework.dll
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\RemoteWindowsAgent.asmx
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\bin\RemoteWindowsAgent.dll
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\RemoteWindowsAgent\Web.config

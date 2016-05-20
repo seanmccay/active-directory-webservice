@@ -1,0 +1,2 @@
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\TestSetup\bin\Debug\TestSetup.msi
+C:\Users\Administrator\Documents\Visual Studio 2010\Projects\RemoteWindowsAgent\TestSetup\bin\Debug\TestSetup.wixpdb

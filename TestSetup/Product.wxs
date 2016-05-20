@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?define Name = "Remote Windows Agent" ?>
+<?define Manufacturer = "Avatier" ?>
+<?define batch_dir = "C:\Program Files (x86)\UltiDev\Web Server\" ?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	<Product Id="*" Name="$(var.Name)" Language="1033" Version="1.0.0.2" Manufacturer="$(var.Manufacturer)" UpgradeCode="afaa2797-6281-4dbf-a33a-3a3e9687502d">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade 
+        Schedule="afterInstallInitialize"
+        AllowDowngrades="no"
+        AllowSameVersionUpgrades="no"
+        DowngradeErrorMessage="A newer version of Avatier's Remote Windows Agent is already installed." />
+    
+		<MediaTemplate EmbedCab="yes" />
+
+    <!-- if this value is not set, the installer UI will just consist of a progress bar.
+          The minimal UI has a terms of use page and an icon. -->
+    <!--<UIRef Id="WixUI_Minimal"/>-->
+    <WixVariable Id="WixUILicenseRtf" Value=".\Avatier Terms of Use.rtf" />
+
+    <!-- Making sure that .NET 2 & 4 are installed. Agent will not be installed they aren't. -->
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_40_OR_LATER_INSTALLED"/>
+    <PropertyRef Id="NETFRAMEWORK20"/>
+    <Condition Message="This application requires .NET Framework 4.0 or greater. Install .NET and then run this installer again.">
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_40_OR_LATER_INSTALLED]]>
+    </Condition>
+    <Condition Message="This application requires .NET Framework 2.0 to be installed. Install this version of .NET or enable the .NET 3.5 Feature Package and run the installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK20]]>
+    </Condition>
+
+		<Feature Id="ProductFeature" Title="RemoteWindowsAgent" Level="1">
+			<ComponentGroupRef Id="AgentComponents" />
+      <ComponentGroupRef Id="UTIL"/>
+      <ComponentGroupRef Id="BIN"/>
+		</Feature>
+
+    <CustomAction Id="UninstallWebServer" BinaryKey="WebServerEXE" ExeCommand="/uninstall" Return="ignore" />
+    <Binary Id="WebServerEXE" SourceFile="C:\Program Files (x86)\UltiDev\Web Server\UWS.Explorer.exe" />
+    <!--<PropertyRef Id="NETFRAMEWORK35"/>
+    <Property Id="SCRIPT_CHECK"><![CDATA[NOT Installed OR NETFRAMEWORK35]]></Property>
+    <CustomAction Id="NET35_FEATURE_SCRIPT"
+                  Property="SCRIPT_CHECK"
+                  Value="&quot;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe&quot; -NoLogo -NonInteractive -InputFormat None -NoProfile -File &quot;$(var.ProjectDir)\NETENABLER.ps1&quot;"
+                  Execute="immediate"
+                  Return="check"/>-->
+  
+    <InstallExecuteSequence>
+      <!--<Custom Action="NET35_FEATURE_SCRIPT" After="InstallFiles">NOT Installed</Custom>-->
+      <Custom Action="UninstallWebServer" After="InstallFinalize" >Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+    </InstallExecuteSequence>
+    
+	</Product>
+
+  <!-- This is the xml that creates the directory tree for the installation of the agent files and dlls -->
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+        <Directory Id="ROOTDIRECTORY" Name="$(var.Manufacturer)">          
+          <Directory Id="INSTALLFOLDER" Name="$(var.Name)">
+            <Directory Id="LOGS" Name="Log"/>
+            <Directory Id="BIN" Name="bin"/>
+            <Directory Id="UTIL" Name="Utilities"/>
+          </Directory>
+        </Directory>				
+			</Directory>
+		</Directory>
+	</Fragment>
+
+  <!-- Here are all of the components of the agent. Each has it's own guid and ID so that if there are
+        problems with the install, you can check logging and see what made it over, what didn't, etc. -->
+	<Fragment>
+		<ComponentGroup Id="AgentComponents" Directory="INSTALLFOLDER">
+      <Component Id="WebService" Guid="{6F93BECB-219E-43A7-88AD-74DA066CA0FD}">
+        <File Id="RemoteWindowsAgent.asmx" Source="$(var.RemoteWindowsAgent.ProjectDir)" KeyPath="yes"/>        
+      </Component>
+      <Component Id="WebConfig" Guid="{5CD793F7-B164-41AE-863D-C5BAB64FA3E5}">
+        <File Id="Web.config" Source="$(var.RemoteWindowsAgent.ProjectDir)" KeyPath="yes"/>        
+      </Component>
+      <Component Id="Log4NetConfig" Guid="{78A708B0-7CDB-42B3-8D80-1D959F8C4454}">
+        <File Id="Log4Net.config" Source="$(var.RemoteWindowsAgent.ProjectDir)bin\Log4Net.config" KeyPath="yes"/>
+      </Component>
+      <Component Id="Uninstall_agent_files" Guid="{DF04DA1F-9DCC-45DA-985E-3A04937EF549}">
+        <RemoveFile Id="WebService" Name="*.asmx" On="uninstall"/>
+        <RemoveFile Id="WebConfig" Name="*.config" On="uninstall"/>
+        <RemoveRegistryKey Id="Remove_Registry" Action="removeOnUninstall" Key="SOFTWARE\Wow6432Node\Avatier" Root="HKLM"/>
+        <RemoveFolder Id="LOGS" Directory="LOGS" On="uninstall"/>
+        <RemoveFolder Id="INSTALLFOLDER" Directory="INSTALLFOLDER" On="uninstall"/>
+        <RemoveFolder Id="ROOTDIRECTORY" Directory="ROOTDIRECTORY" On="uninstall"/>
+      </Component>
+		</ComponentGroup>
+
+    <ComponentGroup Id="UTIL" Directory="UTIL">
+      <Component Id="CONFIGURATOR" Guid="{A71C0E89-567F-4121-B8BA-73FC2A4F45C2}">
+        <File Id="AgentConfiguration.exe" Source="$(var.AgentConfiguration.TargetPath)" KeyPath="yes"/>
+      </Component>
+      <Component Id="Uninstall_config_exe" Guid="{6DD3D5C7-A0BC-490E-93A5-EA51445E633B}">
+        <RemoveFile Id="exe" Name="*.exe" On="uninstall"/>
+        <RemoveFolder Id="Utilities" On="uninstall"/>
+      </Component>
+    </ComponentGroup>
+
+    <ComponentGroup Id="BIN" Directory="BIN">
+      <Component Id="DLL" Guid="{3CC5900A-AC0E-45EB-9CC4-EF1C20376D7B}">
+        <File Id="RemoteWindowsAgent.dll" Source="$(var.RemoteWindowsAgent.ProjectDir)bin\RemoteWindowsAgent.dll"/>
+      </Component>
+      <Component Id="log4net_dll" Guid="{F3458BDE-C834-411F-A4A3-31DE47DCAF84}">
+        <File Id="log4net.dll" Source="$(var.RemoteWindowsAgent.ProjectDir)bin\log4net.dll" KeyPath="yes"/>
+      </Component>
+      <Component Id="nunit_dll" Guid="">
+        <File Id="nunit.framework.dll" Source="$(var.RemoteWindowsAgent.ProjectDir)bin\nunit.framework.dll" KeyPath="yes"/>
+      </Component>
+      <Component Id="Uninstall_DLLs" Guid="{2D339D54-966D-4EF6-AFC3-5AE957A3C7D9}">
+        <RemoveFile Id="dlls" Name="*.dll" On="uninstall"/>
+        <RemoveFolder Id="bin" Directory="BIN" On="uninstall"/>
+        <ServiceControl Id="server_service" Name="UltiDev Web Server Pro" Stop="uninstall" Wait="yes" />
+        <!--<ServiceControl Id="low_priv_service" Name="UWS LoPriv Services" Stop="uninstall" Wait="yes" />
+        <ServiceControl Id="high_priv_service" Name="UWS HiPriv Services" Stop="uninstall" Wait="yes"/>-->
+      </Component>
+    </ComponentGroup> 
+
+	</Fragment>
+
+</Wix>

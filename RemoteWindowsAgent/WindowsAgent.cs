@@ -38,12 +38,12 @@ namespace RemoteWindowsAgent
 
         #region PASSWORD STATION
 
-        public int getAccountInfo(String user, out List<attribute> attributes)
+        public int GetAccountInfo(String user, out List<attribute> attributes)
         {
             try
             {
                 if (allowDebug) log.Debug("Getting user object for - " + user);
-                UserPrincipalExtended upx = getUser(user, null);                
+                UserPrincipalExtended upx = GetUser(user, null);                
 
 
                 //make sure user exists
@@ -66,7 +66,7 @@ namespace RemoteWindowsAgent
                 {
                     string value = expirationDate.ToUniversalTime().ToShortDateString() + " " +
                         expirationDate.ToUniversalTime().ToLongTimeString();
-                    tempAttributes.Add(new attribute { name = "Account Expires", dataType = "time", value = convertToUnixTimestamp(value) });
+                    tempAttributes.Add(new attribute { name = "Account Expires", dataType = "time", value = ConvertToUnixTimestamp(value) });
                 }
                 tempAttributes.Add(new attribute { name = "Account Disabled", dataType = "boolean", value = (!upx.Enabled).ToString() });
                 tempAttributes.Add(new attribute { name = "Account Locked", dataType = "boolean", value = upx.IsAccountLockedOut().ToString() });
@@ -76,7 +76,7 @@ namespace RemoteWindowsAgent
                 }
                 else
                 {
-                   tempAttributes.Add(new attribute { name = "Password Expires", dataType = "string", value = getPwdExpirationDate(user) });
+                   tempAttributes.Add(new attribute { name = "Password Expires", dataType = "string", value = GetPwdExpirationDate(user) });
                 }
 
                 DateTime changeDate = upx.LastPasswordSet.GetValueOrDefault().ToUniversalTime();
@@ -103,7 +103,7 @@ namespace RemoteWindowsAgent
                 {
                     string value = lastLogon.ToUniversalTime().ToShortDateString() + " " +
                         lastLogon.ToUniversalTime().ToLongTimeString();
-                    tempAttributes.Add(new attribute { name = "LastLogon", dataType = "time", value =  convertToUnixTimestamp(value) });
+                    tempAttributes.Add(new attribute { name = "LastLogon", dataType = "time", value =  ConvertToUnixTimestamp(value) });
                 }
 
                 DateTime lastLogonTimestamp = upx.LastLogon.GetValueOrDefault();
@@ -115,10 +115,10 @@ namespace RemoteWindowsAgent
                 {
                     string value = lastLogonTimestamp.ToUniversalTime().ToShortDateString() + " " +
                         lastLogonTimestamp.ToUniversalTime().ToLongTimeString();
-                    tempAttributes.Add(new attribute { name = "LastLogonTimeStamp", dataType = "time", value = convertToUnixTimestamp(value) });
+                    tempAttributes.Add(new attribute { name = "LastLogonTimeStamp", dataType = "time", value = ConvertToUnixTimestamp(value) });
                 }                                
 
-                log.Info("Got attribute values: \r\n" + listAttributes(tempAttributes));
+                log.Info("Got attribute values: \r\n" + ListAttributes(tempAttributes));
                 attributes = tempAttributes;
                 return ReturnCodes.SUCCESS;
             }
@@ -130,12 +130,12 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public int resetPassword(String user, String password)
+        public int ResetPassword(String user, String password)
         {
             try
             {
                 if (allowDebug) log.Debug("Getting user object for - " + user);
-                UserPrincipalExtended userPrincipal = getUser(user, null);
+                UserPrincipalExtended userPrincipal = GetUser(user, null);
                 if (userPrincipal == null) return ReturnCodes.NO_SUCH_USER;
                 userPrincipal.SetPassword(password);
                 userPrincipal.Save();
@@ -152,13 +152,13 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public int verifyPassword(String user, String password)
+        public int VerifyPassword(String user, String password)
         {
             try
             {
                 // check that user exists
                 if (allowDebug) log.Debug("Getting user object for - " + user);
-                UserPrincipalExtended userPrincipal = getUser(user, null);
+                UserPrincipalExtended userPrincipal = GetUser(user, null);
                 if (userPrincipal == null) return ReturnCodes.NO_SUCH_USER;
                 userPrincipal.Dispose();
 
@@ -182,13 +182,13 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public int changePassword(String user, String oldPassword, String password)
+        public int ChangePassword(String user, String oldPassword, String password)
         {
             try
             {
                 //make sure user exists
                 if (allowDebug) log.Debug("Getting user object for - " + user);
-                UserPrincipalExtended userPrincipal = getUser(user, null);
+                UserPrincipalExtended userPrincipal = GetUser(user, null);
                 if (userPrincipal == null) return ReturnCodes.NO_SUCH_USER;
 
                 if (allowDebug) log.Debug("Changing password for user (" + user + ")");
@@ -208,12 +208,12 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public int unlock(String user)
+        public int Unlock(String user)
         {
             try
             {
                 if (allowDebug) log.Debug("Getting user object for - " + user);
-                UserPrincipal userPrincipal = getUser(user, null);
+                UserPrincipal userPrincipal = GetUser(user, null);
                 int result = UnlockAccount(userPrincipal);
                 if (userPrincipal.IsAccountLockedOut()) return ReturnCodes.INTERNAL_ERROR;
 
@@ -231,12 +231,12 @@ namespace RemoteWindowsAgent
 
         #region ACCOUNT TERMINATOR
 
-        public int disable(String user)
+        public int Disable(String user)
         {
             try
             {
                 if (allowDebug) log.Debug("Getting user object for user - " + user);
-                UserPrincipal userPrincipal = getUser(user, null);
+                UserPrincipal userPrincipal = GetUser(user, null);
 
                 //make sure user exists
                 if (userPrincipal == null) return ReturnCodes.NO_SUCH_USER;
@@ -257,12 +257,12 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public int enable(String user)
+        public int Enable(String user)
         {
             try
             {
                 if (allowDebug) log.Debug("Getting user object for user - " + user);
-                UserPrincipal userPrincipal = getUser(user, null);
+                UserPrincipal userPrincipal = GetUser(user, null);
 
                 //make sure user exists
                 if (userPrincipal == null) return ReturnCodes.NO_SUCH_USER;
@@ -283,12 +283,12 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public int delete(String user)
+        public int Delete(String user)
         {
             try
             {
                 if(allowDebug) log.Debug("Getting user object for - " + user);
-                UserPrincipal userPrincipal = getUser(user, null);
+                UserPrincipal userPrincipal = GetUser(user, null);
 
                 //make sure user exists
                 if (userPrincipal == null) return ReturnCodes.NO_SUCH_USER;
@@ -298,7 +298,7 @@ namespace RemoteWindowsAgent
                 userPrincipal.Delete();
 
                 //try to get user again
-                UserPrincipal userPrincipal1 = getUser(user, null);
+                UserPrincipal userPrincipal1 = GetUser(user, null);
                 if (userPrincipal1 != null)
                 {
                     userPrincipal1.Dispose();
@@ -321,12 +321,12 @@ namespace RemoteWindowsAgent
 
         #region ACCOUNT CREATOR        
 
-        public int accountExists(String user)
+        public int AccountExists(String user)
         {
             try
             {
                 if (allowDebug) log.Debug("Getting user object for - " + user);
-                UserPrincipal userPrincipal = getUser(user, null);
+                UserPrincipal userPrincipal = GetUser(user, null);
                 if (userPrincipal == null)
                 {
                     log.Info("User does not exist");
@@ -345,7 +345,7 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public int create(Dictionary<String,String> attributePairs)
+        public int Create(Dictionary<String,String> attributePairs)
         {
             try
             {               
@@ -368,7 +368,7 @@ namespace RemoteWindowsAgent
 
                 //check to see if user already exists.
                 if (allowDebug) log.Debug("Checking if user already exists");
-                UserPrincipal userCheck = getUser(username, targetOU);
+                UserPrincipal userCheck = GetUser(username, targetOU);
                 if (userCheck != null)
                 {
                     log.Warn("User already exists.");
@@ -383,11 +383,11 @@ namespace RemoteWindowsAgent
                 
                 //create the new user principal object
                 if (allowDebug) log.Debug("Building new UserPrincipal object for - " + username);
-                UserPrincipalExtended user = new UserPrincipalExtended(getContext(targetOU));        
+                UserPrincipalExtended user = new UserPrincipalExtended(GetContext(targetOU));        
                 
                 if (sourceProvided)
                 {
-                    UserPrincipalExtended source = getUser(sourceAccount, targetOU);
+                    UserPrincipalExtended source = GetUser(sourceAccount, targetOU);
                     if (allowDebug) log.Debug("Looking for source account - " + sourceAccount);
                     if (source == null) return ReturnCodes.INTERNAL_ERROR;
 
@@ -417,7 +417,7 @@ namespace RemoteWindowsAgent
 
                     //start assigning given values from attributePairs. Will overwrite source properties.
                     if (allowDebug) log.Debug("Assigning given values to UserPrincipal");
-                    assignAttributes(user, attributePairs);
+                    AssignAttributes(user, attributePairs);
 
                     //check to expire password
                     if (attributePairs["usermustchangepasswordnextlogon"].ToLower().Equals("true"))
@@ -439,7 +439,7 @@ namespace RemoteWindowsAgent
                 else
                 {
                     if (allowDebug) log.Debug("Assigning given values to UserPrincipal");
-                    assignAttributes(user, attributePairs);
+                    AssignAttributes(user, attributePairs);
 
                     //check to expire password
                     if (attributePairs["usermustchangepasswordnextlogon"].ToLower().Equals("true"))
@@ -484,7 +484,7 @@ namespace RemoteWindowsAgent
 
         #region GROUPING OBJECT METHODS
 
-        public int doesGroupingObjectExist(String groupingObjectKey)
+        public int DoesGroupingObjectExist(String groupingObjectKey)
         {
             try
             {
@@ -503,11 +503,11 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public int addUserToGroupingObject(String user, String groupingObjectKey)
+        public int AddUserToGroupingObject(String user, String groupingObjectKey)
         {
             try
             {
-                int exists = accountExists(user);
+                int exists = AccountExists(user);
                 if (exists == ReturnCodes.NO_SUCH_USER)
                 {
                     log.Warn("User does not exist.");
@@ -515,7 +515,7 @@ namespace RemoteWindowsAgent
                 }
                 if (allowDebug) log.Debug("Adding user (" + user + ") to group (" + groupingObjectKey + ").");
 
-                UserPrincipalExtended userPrincipal = getUser(user, defaultOU);
+                UserPrincipalExtended userPrincipal = GetUser(user, defaultOU);
                 int result = userPrincipal.AddToGroup(groupingObjectKey);
 
                 return result;
@@ -527,11 +527,11 @@ namespace RemoteWindowsAgent
             }
         }
         
-        public int removeUserFromGroupingObject(String user, String groupingObjectKey)
+        public int RemoveUserFromGroupingObject(String user, String groupingObjectKey)
         {
             try
             {
-                int exists = accountExists(user);
+                int exists = AccountExists(user);
                 if (exists == ReturnCodes.NO_SUCH_USER)
                 {
                     log.Warn("User does not exist.");
@@ -539,7 +539,7 @@ namespace RemoteWindowsAgent
                 }
                 if (allowDebug) log.Debug("Removing user (" + user + ") from group (" + groupingObjectKey + ").");
 
-                UserPrincipalExtended userPrincipal = getUser(user, defaultOU);
+                UserPrincipalExtended userPrincipal = GetUser(user, defaultOU);
                 int result = userPrincipal.RemoveFromGroup(groupingObjectKey);
 
                 return result;
@@ -551,11 +551,11 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public List<String> getGroupingObjectsForUser(String user)
+        public List<String> GetGroupingObjectsForUser(String user)
         {
             try
             {
-                UserPrincipalExtended userPrincipal = getUser(user, defaultOU);
+                UserPrincipalExtended userPrincipal = GetUser(user, defaultOU);
                 List<string> groups = userPrincipal.MemberOf;
                 if (allowDebug) log.Debug("Building list of groups...");
                 for (int i = 0; i < groups.Count; i++)
@@ -603,7 +603,7 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public List<String> getGroupMembers(String groupKey)
+        public List<String> GetGroupMembers(String groupKey)
         {
             PrincipalContext ctx = new PrincipalContext(ContextType.Domain, this.domain);
             GroupPrincipal group = GroupPrincipal.FindByIdentity(ctx, groupKey);
@@ -1166,15 +1166,15 @@ namespace RemoteWindowsAgent
             }
         }
 
-        public UserPrincipalExtended getUser(string user, string targetOU)
+        public UserPrincipalExtended GetUser(string user, string targetOU)
         {
-            PrincipalContext ctx = getContext(targetOU);
+            PrincipalContext ctx = GetContext(targetOU);
             UserPrincipalExtended userPrincipal = UserPrincipalExtended.FindByIdentity(ctx, IdentityType.SamAccountName, user);
 
             return userPrincipal;
         }
 
-        public PrincipalContext getContext(string targetOU)
+        public PrincipalContext GetContext(string targetOU)
         {
             String container = String.IsNullOrEmpty(targetOU) ? defaultOU : targetOU;
             PrincipalContext ctx = new PrincipalContext(ContextType.Domain, domain, container, ContextOptions.SimpleBind, domain + "\\" + serviceAccountName, serviceAccountPassword);
@@ -1182,7 +1182,7 @@ namespace RemoteWindowsAgent
             return ctx;
         }
 
-        public void assignAttributes(UserPrincipal user, Dictionary<String, String> attributePairs)
+        public void AssignAttributes(UserPrincipal user, Dictionary<String, String> attributePairs)
         {
             //use reflection to iterate through UserPrincipal properties and assign values
             PropertyInfo[] userProperties = typeof(UserPrincipal).GetProperties();
@@ -1264,7 +1264,7 @@ namespace RemoteWindowsAgent
             user.Save();
         }
 
-        public string listAttributes(List<attribute> attributes)
+        public string ListAttributes(List<attribute> attributes)
         {
             string result = "";
             foreach (attribute attribute in attributes)
@@ -1275,7 +1275,7 @@ namespace RemoteWindowsAgent
             return result;
         }
 
-        public string convertToUnixTimestamp(string date)
+        public string ConvertToUnixTimestamp(string date)
         {
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             DateTime datetime = DateTime.Parse(date);
@@ -1283,12 +1283,12 @@ namespace RemoteWindowsAgent
             return Math.Floor(diff.TotalSeconds).ToString();
         }
 
-        public string getSecurityKey()
+        public string GetSecurityKey()
         {
             return AgentConfigurator.ReadSetting("security");
         }
 
-        public string getPwdExpirationDate(string user)
+        public string GetPwdExpirationDate(string user)
         {
             using (var userEntry = new DirectoryEntry("WinNT://" + domain + '/' + user + ",user"))
             {

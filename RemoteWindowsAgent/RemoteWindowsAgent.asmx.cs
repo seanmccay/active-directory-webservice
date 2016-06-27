@@ -39,8 +39,8 @@ namespace RemoteWindowsAgent
         public RemoteWindowsAgent()
         {
             this.windowsAgent = new WindowsAgent();
-            this.allowedIPs = AgentConfigurator.Decrypt(windowsAgent.getSecurityKey(), AgentConfigurator.ReadByteSetting("allowedIPs"));
-            this.sharedKey = AgentConfigurator.Decrypt(windowsAgent.getSecurityKey(), AgentConfigurator.ReadByteSetting("sharedKey"));
+            this.allowedIPs = AgentConfigurator.Decrypt(windowsAgent.GetSecurityKey(), AgentConfigurator.ReadByteSetting("allowedIPs"));
+            this.sharedKey = AgentConfigurator.Decrypt(windowsAgent.GetSecurityKey(), AgentConfigurator.ReadByteSetting("sharedKey"));
         }
 
 
@@ -117,7 +117,7 @@ namespace RemoteWindowsAgent
                 return getGenericResult(ReturnCodes.INTERNAL_ERROR, "One or more parameters were null", "");
             }
             List<WindowsAgent.attribute> attributeValues;
-            int result = windowsAgent.getAccountInfo(user, out attributeValues);
+            int result = windowsAgent.GetAccountInfo(user, out attributeValues);
 
             switch (result)
             {
@@ -145,7 +145,7 @@ namespace RemoteWindowsAgent
             if (String.IsNullOrEmpty(user) || String.IsNullOrEmpty(password)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "One or more parameters were null", "");
             log.Info("User = " + user);
 
-            int result = windowsAgent.resetPassword(user, password);
+            int result = windowsAgent.ResetPassword(user, password);
             
             switch (result)
             {
@@ -173,7 +173,7 @@ namespace RemoteWindowsAgent
             if (String.IsNullOrEmpty(user) || String.IsNullOrEmpty(password)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "One or more parameters were null", "");
             log.Info("User = " + user);
 
-            int result = windowsAgent.verifyPassword(user, password);
+            int result = windowsAgent.VerifyPassword(user, password);
 
             switch (result)
             {
@@ -198,7 +198,7 @@ namespace RemoteWindowsAgent
             if (String.IsNullOrEmpty(user) || String.IsNullOrEmpty(oldPassword) || String.IsNullOrEmpty(password)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "One or more parameters were null", "");
             log.Info("User = " + user);
 
-            int result = windowsAgent.changePassword(user, oldPassword, password);
+            int result = windowsAgent.ChangePassword(user, oldPassword, password);
 
             switch (result)
             {
@@ -223,7 +223,7 @@ namespace RemoteWindowsAgent
             if (String.IsNullOrEmpty(user)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "User parameter was null", "");
             log.Info("User = " + user);
 
-            int result = windowsAgent.unlock(user);
+            int result = windowsAgent.Unlock(user);
 
             switch (result)
             {
@@ -260,7 +260,7 @@ namespace RemoteWindowsAgent
             if (String.IsNullOrEmpty(user)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "User parameter was null", "");
             log.Info("User = " + user);
 
-            int result = windowsAgent.disable(user);
+            int result = windowsAgent.Disable(user);
 
             switch (result)
             {
@@ -286,7 +286,7 @@ namespace RemoteWindowsAgent
             if (String.IsNullOrEmpty(user)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "User parameter was null", "");
             log.Info("User = " + user);
 
-            int result = windowsAgent.enable(user);
+            int result = windowsAgent.Enable(user);
 
             switch (result)
             {
@@ -321,7 +321,7 @@ namespace RemoteWindowsAgent
             string username = user.ElementAt(0).Value;
             log.Info("User = " + username);
 
-            int result = windowsAgent.delete(username);
+            int result = windowsAgent.Delete(username);
 
             switch (result)
             {
@@ -352,7 +352,7 @@ namespace RemoteWindowsAgent
             if (String.IsNullOrEmpty(user)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "User parameter was null", "");
             log.Info("User = " + user);
 
-            int result = windowsAgent.accountExists(user);
+            int result = windowsAgent.AccountExists(user);
 
             switch (result)
             {
@@ -435,7 +435,7 @@ namespace RemoteWindowsAgent
                 attributePairs.Add(attNms[i], attVls[i]);
             }
 
-            int result = windowsAgent.create(attributePairs);
+            int result = windowsAgent.Create(attributePairs);
 
             switch (result)
             {
@@ -490,7 +490,7 @@ namespace RemoteWindowsAgent
             if (String.IsNullOrEmpty(groupingObjectKey)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "GroupingObjectKey was null", "");
 
             log.Info("Looking for grouping object.");
-            int result = windowsAgent.doesGroupingObjectExist(groupingObjectKey);
+            int result = windowsAgent.DoesGroupingObjectExist(groupingObjectKey);
 
             switch (result)
             {
@@ -518,13 +518,13 @@ namespace RemoteWindowsAgent
             log.Info("User = " + user);
             if (String.IsNullOrEmpty(type) || type != "group") return getGenericResult(ReturnCodes.INTERNAL_ERROR, "Type parameter was not group or was empty.", "");
 
-            int exists = windowsAgent.accountExists(user);
+            int exists = windowsAgent.AccountExists(user);
             if (exists == ReturnCodes.NO_SUCH_USER)
             {
                 log.Warn("User was not found.");
                 return getGenericResult(ReturnCodes.NO_SUCH_USER, "", "");
             }
-            List<String> result = windowsAgent.getGroupingObjectsForUser(user);           
+            List<String> result = windowsAgent.GetGroupingObjectsForUser(user);           
 
             return buildListResult(result);
         }
@@ -543,7 +543,7 @@ namespace RemoteWindowsAgent
             if (String.IsNullOrEmpty(type) || type != "group") return getGenericResult(ReturnCodes.INTERNAL_ERROR, "Type parameter was not group or was empty.", "");
             if (String.IsNullOrEmpty(groupingObjectKey)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "GroupingObjectKey was null", "");
 
-            int result = windowsAgent.addUserToGroupingObject(user, groupingObjectKey);
+            int result = windowsAgent.AddUserToGroupingObject(user, groupingObjectKey);
 
             switch (result)
             {
@@ -575,7 +575,7 @@ namespace RemoteWindowsAgent
             if (String.IsNullOrEmpty(type) || type != "group") return getGenericResult(ReturnCodes.INTERNAL_ERROR, "Type parameter was not group or was empty.", "");
             if (String.IsNullOrEmpty(groupingObjectKey)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "GroupingObjectKey was null", "");
 
-            int result = windowsAgent.removeUserFromGroupingObject(user, groupingObjectKey);
+            int result = windowsAgent.RemoveUserFromGroupingObject(user, groupingObjectKey);
 
             switch(result)
             {
@@ -605,7 +605,7 @@ namespace RemoteWindowsAgent
             }
             if (String.IsNullOrEmpty(group)) return getGenericResult(ReturnCodes.INTERNAL_ERROR, "GroupingObjectKey was null", "");
 
-            List<String> members = windowsAgent.getGroupMembers(group);
+            List<String> members = windowsAgent.GetGroupMembers(group);
             if (members == null)
             {
                 return getGenericResult(ReturnCodes.NO_SUCH_GROUP, "Group could not be found.", "");
